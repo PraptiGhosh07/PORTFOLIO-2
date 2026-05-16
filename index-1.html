@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Prapti Ghosh — Portfolio</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap');
+
+    :root {
+      --blush:      #f5e6e0;
+      --rose:       #d4a5a0;
+      --dusty-mauve:#b07b7b;
+      --warm-cream: #faf6f3;
+      --ivory:      #f2ede9;
+      --charcoal:   #3a3030;
+      --muted:      #7a6060;
+      --glass-bg:   rgba(255,255,255,0.55);
+      --glass-border: rgba(255,255,255,0.75);
+      --shadow:     0 8px 32px rgba(176,123,123,0.13);
+      --shadow-hover: 0 20px 48px rgba(176,123,123,0.22);
+      --radius:     20px;
+      --transition: 0.4s cubic-bezier(0.23,1,0.32,1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--warm-cream);
+      color: var(--charcoal);
+      overflow-x: hidden;
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    /* ── Background Mesh ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 15% 10%, rgba(245,230,224,0.7) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 85% 80%, rgba(212,165,160,0.35) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 40% at 50% 50%, rgba(250,246,243,0.5) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Noise texture ── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--ivory); }
+    ::-webkit-scrollbar-thumb { background: var(--rose); border-radius: 99px; }
+
+    /* ─────────────── NAV ─────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.1rem 2.5rem;
+      background: rgba(250,246,243,0.72);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(212,165,160,0.25);
+      transition: box-shadow 0.3s;
+    }
+    nav.scrolled { box-shadow: 0 4px 24px rgba(176,123,123,0.12); }
+
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.55rem;
+      font-weight: 600;
+      color: var(--charcoal);
+      letter-spacing: 0.02em;
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--dusty-mauve); }
+
+    .nav-links {
+      display: flex;
+      gap: 2.2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.88rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      position: relative;
+      transition: color var(--transition);
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -3px; left: 0;
+      width: 0; height: 1.5px;
+      background: var(--dusty-mauve);
+      transition: width var(--transition);
+    }
+    .nav-links a:hover { color: var(--dusty-mauve); }
+    .nav-links a:hover::after { width: 100%; }
+
+    /* Hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px; height: 2px;
+      background: var(--charcoal);
+      border-radius: 2px;
+      transition: var(--transition);
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* Mobile menu */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 64px; left: 0; right: 0;
+      background: rgba(250,246,243,0.97);
+      backdrop-filter: blur(20px);
+      padding: 2rem;
+      flex-direction: column;
+      gap: 1.5rem;
+      z-index: 99;
+      border-bottom: 1px solid rgba(212,165,160,0.2);
+      transform: translateY(-10px);
+      opacity: 0;
+      transition: all 0.35s cubic-bezier(0.23,1,0.32,1);
+      pointer-events: none;
+    }
+    .mobile-menu.open {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: all;
+    }
+    .mobile-menu a {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--charcoal);
+      text-decoration: none;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(212,165,160,0.2);
+    }
+
+    /* ─────────────── HERO ─────────────── */
+    #home {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 7rem 2rem 4rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-inner { max-width: 720px; }
+
+    .hero-tag {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--dusty-mauve);
+      background: rgba(212,165,160,0.15);
+      border: 1px solid rgba(212,165,160,0.35);
+      padding: 0.35rem 1.1rem;
+      border-radius: 99px;
+      margin-bottom: 1.8rem;
+      animation: fadeUp 0.8s 0.2s both;
+    }
+
+    .hero-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.2rem, 8vw, 6rem);
+      font-weight: 300;
+      line-height: 1.08;
+      color: var(--charcoal);
+      letter-spacing: -0.01em;
+      animation: fadeUp 0.8s 0.4s both;
+    }
+    .hero-name em {
+      font-style: italic;
+      color: var(--dusty-mauve);
+    }
+
+    .hero-subtitle {
+      font-size: 1.08rem;
+      color: var(--muted);
+      margin-top: 1.4rem;
+      font-weight: 300;
+      animation: fadeUp 0.8s 0.6s both;
+    }
+
+    /* Typing cursor */
+    .typed-text { color: var(--dusty-mauve); font-weight: 500; }
+    .cursor {
+      display: inline-block;
+      width: 2px; height: 1em;
+      background: var(--dusty-mauve);
+      margin-left: 2px;
+      vertical-align: middle;
+      animation: blink 0.9s step-end infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    .hero-cta {
+      margin-top: 2.6rem;
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      animation: fadeUp 0.8s 0.8s both;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.85rem 2rem;
+      border-radius: 99px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all var(--transition);
+      letter-spacing: 0.03em;
+    }
+    .btn-primary {
+      background: var(--charcoal);
+      color: #fff;
+      border: 2px solid var(--charcoal);
+    }
+    .btn-primary:hover {
+      background: var(--dusty-mauve);
+      border-color: var(--dusty-mauve);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(176,123,123,0.3);
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--charcoal);
+      border: 2px solid rgba(58,48,48,0.25);
+    }
+    .btn-outline:hover {
+      border-color: var(--dusty-mauve);
+      color: var(--dusty-mauve);
+      transform: translateY(-2px);
+    }
+
+    .hero-scroll-hint {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      opacity: 0.6;
+      animation: fadeUp 1s 1.4s both;
+    }
+    .scroll-line {
+      width: 1px; height: 40px;
+      background: linear-gradient(to bottom, var(--rose), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%,100% { opacity: 0.4; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(1.15); }
+    }
+
+    /* ─────────────── SECTIONS ─────────────── */
+    section {
+      position: relative;
+      z-index: 1;
+      padding: 6rem 2rem;
+    }
+
+    .section-container { max-width: 1100px; margin: 0 auto; }
+
+    .section-label {
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--dusty-mauve);
+      margin-bottom: 0.6rem;
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.2rem, 5vw, 3.4rem);
+      font-weight: 400;
+      color: var(--charcoal);
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .section-divider {
+      width: 48px; height: 2px;
+      background: linear-gradient(to right, var(--rose), var(--dusty-mauve));
+      border-radius: 2px;
+      margin-bottom: 3.5rem;
+    }
+
+    /* Fade-in animation */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s cubic-bezier(0.23,1,0.32,1), transform 0.7s cubic-bezier(0.23,1,0.32,1);
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .fade-in.delay-1 { transition-delay: 0.1s; }
+    .fade-in.delay-2 { transition-delay: 0.2s; }
+    .fade-in.delay-3 { transition-delay: 0.3s; }
+
+    /* ─────────────── ABOUT ─────────────── */
+    #about { background: transparent; }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-avatar-wrap {
+      position: relative;
+      display: flex;
+      justify-content: center;
+    }
+
+    .about-avatar-bg {
+      width: 320px; height: 360px;
+      border-radius: 48% 52% 60% 40% / 44% 50% 50% 56%;
+      background: linear-gradient(135deg, var(--blush) 0%, rgba(212,165,160,0.4) 100%);
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      animation: morphBlob 8s ease-in-out infinite alternate;
+    }
+    @keyframes morphBlob {
+      from { border-radius: 48% 52% 60% 40% / 44% 50% 50% 56%; }
+      to   { border-radius: 56% 44% 40% 60% / 52% 42% 58% 48%; }
+    }
+
+    .avatar-initials {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 6rem;
+      font-weight: 300;
+      color: var(--dusty-mauve);
+      opacity: 0.6;
+      user-select: none;
+      letter-spacing: -0.05em;
+    }
+
+    .about-deco {
+      position: absolute;
+      bottom: -12px; right: -12px;
+      width: 90px; height: 90px;
+      border: 2px solid rgba(212,165,160,0.4);
+      border-radius: 50%;
+    }
+    .about-deco::before {
+      content: '';
+      position: absolute;
+      inset: 12px;
+      border: 1px solid rgba(212,165,160,0.25);
+      border-radius: 50%;
+    }
+
+    .about-text p {
+      font-size: 1.08rem;
+      color: var(--muted);
+      font-weight: 300;
+      margin-bottom: 1.5rem;
+    }
+
+    .about-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 2rem;
+    }
+    .pill {
+      font-size: 0.82rem;
+      font-weight: 500;
+      padding: 0.4rem 1rem;
+      border-radius: 99px;
+      background: rgba(212,165,160,0.15);
+      border: 1px solid rgba(212,165,160,0.3);
+      color: var(--dusty-mauve);
+    }
+
+    /* ─────────────── HOBBIES ─────────────── */
+    #hobbies { background: transparent; }
+
+    .hobbies-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.8rem;
+    }
+
+    .hobby-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: var(--radius);
+      padding: 2.4rem 2rem;
+      box-shadow: var(--shadow);
+      text-align: center;
+      transition: transform var(--transition), box-shadow var(--transition);
+      cursor: default;
+    }
+    .hobby-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .hobby-icon {
+      width: 64px; height: 64px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, var(--blush), rgba(212,165,160,0.3));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.4rem;
+    }
+    .hobby-icon svg { width: 30px; height: 30px; }
+
+    .hobby-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: var(--charcoal);
+      margin-bottom: 0.5rem;
+    }
+    .hobby-card p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      font-weight: 300;
+    }
+
+    /* ─────────────── PROJECTS ─────────────── */
+    #projects { background: transparent; }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .project-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+    .project-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .project-thumb {
+      height: 180px;
+      background: linear-gradient(135deg, var(--blush) 0%, rgba(212,165,160,0.5) 50%, rgba(176,123,123,0.3) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .project-thumb::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 30% 40%, rgba(255,255,255,0.35), transparent 65%);
+    }
+    .project-thumb-icon {
+      width: 64px; height: 64px;
+      background: rgba(255,255,255,0.65);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px rgba(176,123,123,0.25);
+    }
+    .project-thumb-icon svg { width: 32px; height: 32px; }
+
+    .project-body { padding: 1.8rem; }
+
+    .project-tag {
+      font-size: 0.73rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--dusty-mauve);
+      margin-bottom: 0.7rem;
+    }
+    .project-body h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 500;
+      color: var(--charcoal);
+      margin-bottom: 0.5rem;
+    }
+    .project-body p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      font-weight: 300;
+      margin-bottom: 1.4rem;
+    }
+    .project-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.87rem;
+      font-weight: 500;
+      color: var(--dusty-mauve);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(176,123,123,0.35);
+      padding-bottom: 1px;
+      transition: color var(--transition), border-color var(--transition);
+    }
+    .project-link:hover { color: var(--charcoal); border-color: var(--charcoal); }
+
+    /* ─────────────── CONTACT ─────────────── */
+    #contact { background: transparent; }
+
+    .contact-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .contact-info { }
+    .contact-info p {
+      font-size: 1.05rem;
+      color: var(--muted);
+      font-weight: 300;
+      margin-bottom: 2.5rem;
+    }
+
+    .contact-items { display: flex; flex-direction: column; gap: 1.2rem; }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.1rem 1.4rem;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 14px;
+      box-shadow: 0 4px 16px rgba(176,123,123,0.08);
+      transition: transform var(--transition), box-shadow var(--transition);
+      text-decoration: none;
+      color: inherit;
+    }
+    .contact-item:hover {
+      transform: translateX(6px);
+      box-shadow: 0 8px 28px rgba(176,123,123,0.16);
+    }
+    .contact-item-icon {
+      width: 42px; height: 42px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--blush), rgba(212,165,160,0.4));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .contact-item-icon svg { width: 20px; height: 20px; }
+    .contact-item-text { }
+    .contact-item-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--dusty-mauve);
+    }
+    .contact-item-value {
+      font-size: 0.95rem;
+      color: var(--charcoal);
+      font-weight: 400;
+    }
+
+    /* contact form */
+    .contact-form-wrap {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: var(--radius);
+      padding: 2.4rem;
+      box-shadow: var(--shadow);
+    }
+
+    .form-group { margin-bottom: 1.4rem; }
+    .form-group label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      margin-bottom: 0.45rem;
+      text-transform: uppercase;
+    }
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.85rem 1.1rem;
+      border: 1.5px solid rgba(212,165,160,0.3);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.6);
+      color: var(--charcoal);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: var(--dusty-mauve);
+      box-shadow: 0 0 0 3px rgba(176,123,123,0.12);
+    }
+    .form-group textarea { resize: vertical; min-height: 120px; }
+
+    .form-submit {
+      width: 100%;
+      padding: 0.95rem;
+      border-radius: 99px;
+      border: none;
+      background: var(--charcoal);
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+      letter-spacing: 0.03em;
+    }
+    .form-submit:hover {
+      background: var(--dusty-mauve);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(176,123,123,0.3);
+    }
+
+    .form-success {
+      display: none;
+      text-align: center;
+      padding: 1rem;
+      color: var(--dusty-mauve);
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+
+    /* ─────────────── FOOTER ─────────────── */
+    footer {
+      position: relative;
+      z-index: 1;
+      background: var(--charcoal);
+      color: rgba(255,255,255,0.7);
+      padding: 3.5rem 2rem 2rem;
+      text-align: center;
+    }
+
+    .footer-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.4rem;
+      font-weight: 300;
+      color: #fff;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.04em;
+    }
+    .footer-tagline {
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.45);
+      margin-bottom: 2rem;
+      letter-spacing: 0.05em;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+    }
+    .footer-links a {
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .footer-links a:hover { color: var(--rose); }
+
+    .footer-divider {
+      width: 48px; height: 1px;
+      background: rgba(255,255,255,0.12);
+      margin: 0 auto 1.8rem;
+    }
+
+    .footer-copy {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.3);
+    }
+    .footer-copy span { color: var(--rose); }
+
+    /* ─────────────── ANIMATIONS ─────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─────────────── RESPONSIVE ─────────────── */
+    @media (max-width: 900px) {
+      .about-grid { grid-template-columns: 1fr; text-align: center; }
+      .about-avatar-wrap { margin-bottom: 2rem; }
+      .about-pills { justify-content: center; }
+      .contact-wrapper { grid-template-columns: 1fr; }
+      nav { padding: 1rem 1.5rem; }
+    }
+
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .mobile-menu { display: flex; }
+      section { padding: 4rem 1.2rem; }
+      .about-avatar-bg { width: 240px; height: 280px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <a href="#home" class="nav-logo">Prapti<span>.</span></a>
+    <ul class="nav-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#hobbies">Hobbies</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#home" onclick="closeMobile()">Home</a>
+    <a href="#about" onclick="closeMobile()">About</a>
+    <a href="#hobbies" onclick="closeMobile()">Hobbies</a>
+    <a href="#projects" onclick="closeMobile()">Projects</a>
+    <a href="#contact" onclick="closeMobile()">Contact</a>
+  </div>
+
+  <!-- HERO -->
+  <section id="home">
+    <div class="hero-inner">
+      <div class="hero-tag">✦ Welcome to my space</div>
+      <h1 class="hero-name">Prapti <em>Ghosh</em></h1>
+      <p class="hero-subtitle">
+        <span class="typed-text" id="typed"></span><span class="cursor"></span>
+      </p>
+      <div class="hero-cta">
+        <a href="#projects" class="btn btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          View Projects
+        </a>
+        <a href="#contact" class="btn btn-outline">Get in Touch</a>
+      </div>
+    </div>
+    <div class="hero-scroll-hint">
+      <div class="scroll-line"></div>
+      Scroll
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-container">
+      <div class="about-grid">
+        <div class="about-avatar-wrap fade-in">
+          <div class="about-avatar-bg">
+            <div class="avatar-initials">PG</div>
+          </div>
+          <div class="about-deco"></div>
+        </div>
+        <div class="about-text fade-in delay-2">
+          <div class="section-label">About Me</div>
+          <h2 class="section-title">A curious soul & creative mind</h2>
+          <div class="section-divider"></div>
+          <p>I'm a student of Sociology, pursuing my B.A course from Suryasen Mahavidyalaya, West Bengal. I love exploring the fascinating dynamics of society and human behaviour.</p>
+          <p>Beyond academics, I find joy in creative pursuits — from sketching and crafting to writing code. I believe in blending analytical thinking with artistic expression.</p>
+          <div class="about-pills">
+            <span class="pill">Sociology Student</span>
+            <span class="pill">West Bengal</span>
+            <span class="pill">Creative Thinker</span>
+            <span class="pill">Lifelong Learner</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOBBIES -->
+  <section id="hobbies">
+    <div class="section-container">
+      <div class="fade-in">
+        <div class="section-label">What I Love</div>
+        <h2 class="section-title">My Hobbies</h2>
+        <div class="section-divider"></div>
+      </div>
+      <div class="hobbies-grid">
+        <!-- Drawing -->
+        <div class="hobby-card fade-in delay-1">
+          <div class="hobby-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#b07b7b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 21l4-4 13-13a2 2 0 0 1 3 3L9 20l-7 1z"/>
+              <path d="M14 4l6 6"/>
+            </svg>
+          </div>
+          <h3>Drawing</h3>
+          <p>Expressing emotions and ideas through art — sketching characters, landscapes, and everything in between.</p>
+        </div>
+        <!-- Crafting -->
+        <div class="hobby-card fade-in delay-2">
+          <div class="hobby-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#b07b7b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+              <line x1="12" y1="22.08" x2="12" y2="12"/>
+            </svg>
+          </div>
+          <h3>Crafting</h3>
+          <p>Turning everyday materials into beautiful creations — handmade gifts, origami, and DIY décor with love.</p>
+        </div>
+        <!-- Coding -->
+        <div class="hobby-card fade-in delay-3">
+          <div class="hobby-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#b07b7b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="16 18 22 12 16 6"/>
+              <polyline points="8 6 2 12 8 18"/>
+            </svg>
+          </div>
+          <h3>Coding</h3>
+          <p>Building things for the web — exploring how technology can solve problems and create delightful experiences.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="section-container">
+      <div class="fade-in">
+        <div class="section-label">My Work</div>
+        <h2 class="section-title">Projects</h2>
+        <div class="section-divider"></div>
+      </div>
+      <div class="projects-grid">
+        <div class="project-card fade-in delay-1">
+          <div class="project-thumb">
+            <div class="project-thumb-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#b07b7b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
+                <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/>
+                <line x1="6" y1="1" x2="6" y2="4"/>
+                <line x1="10" y1="1" x2="10" y2="4"/>
+                <line x1="14" y1="1" x2="14" y2="4"/>
+              </svg>
+            </div>
+          </div>
+          <div class="project-body">
+            <div class="project-tag">Web Application</div>
+            <h3>Fitness App</h3>
+            <p>A web-based fitness tracker designed to help users manage workouts, track progress, and stay motivated on their health journey.</p>
+            <a href="https://fitness-app-2-gamma.vercel.app/" target="_blank" rel="noopener" class="project-link">
+              View Live
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-container">
+      <div class="fade-in">
+        <div class="section-label">Let's Connect</div>
+        <h2 class="section-title">Get In Touch</h2>
+        <div class="section-divider"></div>
+      </div>
+      <div class="contact-wrapper">
+        <div class="contact-info fade-in delay-1">
+          <p>Whether you'd like to collaborate, have a question, or just want to say hello — my inbox is always open.</p>
+          <div class="contact-items">
+            <a href="mailto:praptighosh931@gmail.com" class="contact-item">
+              <div class="contact-item-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#b07b7b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                  <polyline points="22,6 12,13 2,6"/>
+                </svg>
+              </div>
+              <div class="contact-item-text">
+                <div class="contact-item-label">Email</div>
+                <div class="contact-item-value">praptighosh931@gmail.com</div>
+              </div>
+            </a>
+            <a href="tel:7318640798" class="contact-item">
+              <div class="contact-item-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#b07b7b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.51 2 2 0 0 1 3.6 1.37h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9a16 16 0 0 0 6 6l.9-.9a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.9 16.92z"/>
+                </svg>
+              </div>
+              <div class="contact-item-text">
+                <div class="contact-item-label">Phone</div>
+                <div class="contact-item-value">+91 7318640798</div>
+              </div>
+            </a>
+            <a href="https://fitness-app-2-gamma.vercel.app/" target="_blank" rel="noopener" class="contact-item">
+              <div class="contact-item-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#b07b7b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+                </svg>
+              </div>
+              <div class="contact-item-text">
+                <div class="contact-item-label">GitHub / Portfolio</div>
+                <div class="contact-item-value">View my work →</div>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <div class="contact-form-wrap fade-in delay-2">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" placeholder="Your name" autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="your@email.com" autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" placeholder="Say something nice..."></textarea>
+          </div>
+          <button class="form-submit" onclick="handleFormSubmit()">Send Message ✦</button>
+          <div class="form-success" id="formSuccess">
+            ✦ Thank you! Your message has been sent.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-name">Prapti Ghosh</div>
+    <div class="footer-tagline">Sociology Student · Creator · Dreamer</div>
+    <nav class="footer-links">
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#hobbies">Hobbies</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="footer-divider"></div>
+    <p class="footer-copy">© 2025 Prapti Ghosh · Made with <span>♥</span></p>
+  </footer>
+
+  <script>
+    /* ── NAV SCROLL ── */
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 30);
+    });
+
+    /* ── HAMBURGER ── */
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+    });
+    function closeMobile() {
+      hamburger.classList.remove('open');
+      mobileMenu.classList.remove('open');
+    }
+
+    /* ── TYPING EFFECT ── */
+    const phrases = [
+      'Sociology Student 🎓',
+      'Creative Soul 🎨',
+      'Craft Enthusiast ✂️',
+      'Aspiring Developer 💻',
+      'Based in West Bengal 🌸',
+    ];
+    let pIdx = 0, cIdx = 0, isDeleting = false;
+    const typedEl = document.getElementById('typed');
+
+    function type() {
+      const phrase = phrases[pIdx];
+      if (isDeleting) {
+        typedEl.textContent = phrase.slice(0, --cIdx);
+      } else {
+        typedEl.textContent = phrase.slice(0, ++cIdx);
+      }
+      let delay = isDeleting ? 55 : 90;
+      if (!isDeleting && cIdx === phrase.length) {
+        delay = 1800;
+        isDeleting = true;
+      } else if (isDeleting && cIdx === 0) {
+        isDeleting = false;
+        pIdx = (pIdx + 1) % phrases.length;
+        delay = 350;
+      }
+      setTimeout(type, delay);
+    }
+    setTimeout(type, 1000);
+
+    /* ── SCROLL FADE-IN ── */
+    const fadeEls = document.querySelectorAll('.fade-in');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    fadeEls.forEach(el => observer.observe(el));
+
+    /* ── FORM SUBMIT ── */
+    function handleFormSubmit() {
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const message = document.getElementById('message').value.trim();
+      const success = document.getElementById('formSuccess');
+
+      if (!name || !email || !message) {
+        alert('Please fill in all fields before sending.');
+        return;
+      }
+
+      const btn = document.querySelector('.form-submit');
+      btn.textContent = 'Sending…';
+      btn.disabled = true;
+
+      setTimeout(() => {
+        btn.style.display = 'none';
+        success.style.display = 'block';
+        document.getElementById('name').value = '';
+        document.getElementById('email').value = '';
+        document.getElementById('message').value = '';
+      }, 1200);
+    }
+
+    /* ── ACTIVE NAV HIGHLIGHT ── */
+    const sections = document.querySelectorAll('section[id]');
+    const navAs = document.querySelectorAll('.nav-links a');
+
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(s => {
+        if (window.scrollY >= s.offsetTop - 120) current = s.id;
+      });
+      navAs.forEach(a => {
+        a.style.color = a.getAttribute('href') === `#${current}` ? 'var(--dusty-mauve)' : '';
+      });
+    });
+  </script>
+</body>
+</html>
